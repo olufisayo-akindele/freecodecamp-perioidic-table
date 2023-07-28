@@ -10,17 +10,17 @@ then
   exit
 fi
 
-#if argument is atomic number
+#if argument is not a number(string)
 if [[ ! $1 =~ ^[1-9]+$ ]]
 then
   POTENTIAL_ELEMENT=$($PSQL "SELECT e.atomic_number, name, symbol, type, atomic_mass, melting_point_celsius, boiling_point_celsius FROM elements e INNER JOIN properties p on e.atomic_number=p.atomic_number INNER JOIN types t on t.type_id=p.type_id WHERE name = '$1' or symbol = '$1'")
 else
   POTENTIAL_ELEMENT=$($PSQL "SELECT e.atomic_number, name, symbol, type, atomic_mass, melting_point_celsius, boiling_point_celsius FROM elements e INNER JOIN properties p on e.atomic_number=p.atomic_number INNER JOIN types t on t.type_id=p.type_id WHERE e.atomic_number = '$1'")
 
-#if argument is string
+#if argument is a number
   fi
 
-#element not in db
+#element not found in db
 if [[ ! $POTENTIAL_ELEMENT ]]
 then
   echo -e "I could not find that element in the database."
